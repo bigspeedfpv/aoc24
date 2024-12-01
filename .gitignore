@@ -35,4 +35,4 @@ setup.log
 _opam/
 
 .envrc
-./**/day*.txt
+input.txt
