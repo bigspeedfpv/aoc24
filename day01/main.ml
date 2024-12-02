@@ -35,5 +35,5 @@ let () =
     |> List.split
   in
   Printf.printf "Part 1: %d\n" @@ part1 left right;
-  Printf.printf "Part 12: %d\n" @@ part2 left right
+  Printf.printf "Part 2: %d\n" @@ part2 left right
 ;;
