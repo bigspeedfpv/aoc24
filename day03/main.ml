@@ -9,7 +9,7 @@ let part1 input =
     with
     | Not_found -> groups
   in
-  input |> search 0 |> List.map (fun (a, b) -> a * b) |> List.fold_left ( + ) 0
+  input |> search 0 |> List.map (fun (a, b) -> a * b) |> Aoc.sum
 ;;
 
 let part2 input =
@@ -36,7 +36,7 @@ let part2 input =
       try search ~groups ~is_on (start + 1) input with
       | Invalid_argument _ -> groups)
   in
-  input |> search 0 |> List.map (fun (a, b) -> a * b) |> List.fold_left ( + ) 0
+  input |> search 0 |> List.map (fun (a, b) -> a * b) |> Aoc.sum
 ;;
 
 let () =

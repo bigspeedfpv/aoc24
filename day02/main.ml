@@ -32,7 +32,7 @@ let check_report report =
   | false -> 0
 ;;
 
-let part1 reports = reports |> List.map check_report |> List.fold_left ( + ) 0
+let part1 reports = reports |> List.map check_report |> Aoc.sum
 
 (* TODO: maybe make this not bad lol *)
 let part2 reports =
@@ -45,7 +45,7 @@ let part2 reports =
       | 1 -> 1
       | _ -> check_report' ~idx:(idx + 1) report)
   in
-  reports |> List.map check_report' |> List.fold_left ( + ) 0
+  reports |> List.map check_report' |> Aoc.sum
 ;;
 
 let () =

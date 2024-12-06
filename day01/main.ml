@@ -1,9 +1,7 @@
 let part1 left right =
   let sorted_left = List.sort ( - ) left in
   let sorted_right = List.sort ( - ) right in
-  List.combine sorted_left sorted_right
-  |> List.map (fun (l, r) -> abs (r - l))
-  |> List.fold_left (fun acc n -> acc + n) 0
+  List.combine sorted_left sorted_right |> List.map (fun (l, r) -> abs (r - l)) |> Aoc.sum
 ;;
 
 let part2 left right =
@@ -20,7 +18,7 @@ let part2 left right =
   |> List.map (fun n ->
     let occurrences = count_occurrences n in
     n * occurrences)
-  |> List.fold_left (fun acc n -> acc + n) 0
+  |> Aoc.sum
 ;;
 
 let () =
