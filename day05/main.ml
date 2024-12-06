@@ -31,7 +31,7 @@ let part1 input =
   in
   List.nth parts 1
   |> String.split_on_char '\n'
-  |> List.filter (fun l -> l != "")
+  |> Aoc.filter_empty
   |> List.map (fun update -> update |> String.split_on_char ',' |> List.map int_of_string)
   |> List.filter test_update
   |> List.map (fun update -> List.nth update @@ (List.length update / 2))
