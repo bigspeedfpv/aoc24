@@ -30,7 +30,7 @@ let part1 input width =
     directions
     |> List.filter (fun (offset_x, offset_y) -> check_direction x y offset_x offset_y)
     |> List.length)
-  |> List.fold_left ( + ) 0
+  |> Aoc.sum
 ;;
 
 let part2 input width =
