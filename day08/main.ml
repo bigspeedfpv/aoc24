@@ -36,7 +36,7 @@ module AntinodeSet = Set.Make (Antinode)
 
 let part1 input =
   let map, width, height = parse_input input in
-  let find_antinodes channel positions =
+  let find_antinodes positions =
     let rec find_antinodes' found = function
       | [] -> found
       | (x, y) :: xs ->
@@ -47,15 +47,6 @@ let part1 input =
               then acc
               else (
                 let anx, any = x + (x - x'), y + (y - y') in
-                Printf.printf
-                  "Channel: %c\nNode 1: %d, %d\nNode 2: %d, %d\nAntinode at %d, %d\n\n"
-                  channel
-                  x
-                  y
-                  x'
-                  y'
-                  anx
-                  any;
                 if Aoc.in_range 0 width anx && Aoc.in_range 0 height any
                 then AntinodeSet.add (anx, any) acc
                 else acc))
@@ -66,20 +57,47 @@ let part1 input =
     in
     find_antinodes' AntinodeSet.empty positions
   in
-  let antinodes =
-    map
-    |> Hashtbl.to_seq
-    |> Seq.fold_left
-         (fun acc (chan, pos) -> AntinodeSet.union acc @@ find_antinodes chan pos)
-         AntinodeSet.empty
-  in
-  AntinodeSet.iter
-    (fun a -> Printf.printf "Antinode at %d, %d\n%!" (fst a) (snd a))
-    antinodes;
-  AntinodeSet.cardinal antinodes
+  map
+  |> Hashtbl.to_seq
+  |> Seq.fold_left
+       (fun acc (_, pos) -> AntinodeSet.union acc @@ find_antinodes pos)
+       AntinodeSet.empty
+  |> AntinodeSet.cardinal
 ;;
 
-let part2 _input = 0
+let part2 input =
+  let map, width, height = parse_input input in
+  let find_antinodes positions =
+    let rec generate_antinodes x y dx dy acc =
+      if Aoc.in_range 0 width x && Aoc.in_range 0 height y
+      then generate_antinodes (x + dx) (y + dy) dx dy (AntinodeSet.add (x, y) acc)
+      else acc
+    in
+    let rec find_antinodes' found = function
+      | [] -> found
+      | (x, y) :: xs ->
+        let found =
+          List.fold_left
+            (fun acc (x', y') ->
+              if x = x' && y = y'
+              then acc
+              else (
+                let dx, dy = x - x', y - y' in
+                AntinodeSet.empty |> generate_antinodes x y dx dy |> AntinodeSet.union acc))
+            found
+            positions
+        in
+        find_antinodes' found xs
+    in
+    find_antinodes' AntinodeSet.empty positions
+  in
+  map
+  |> Hashtbl.to_seq
+  |> Seq.fold_left
+       (fun acc (_, pos) -> AntinodeSet.union acc @@ find_antinodes pos)
+       AntinodeSet.empty
+  |> AntinodeSet.cardinal
+;;
 
 let () =
   let input = In_channel.input_all stdin in
