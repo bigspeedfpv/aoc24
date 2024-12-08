@@ -62,7 +62,7 @@ let part2 input width =
 let () =
   (* convert input to a char array array, rather than a char list list, for (hopefully) faster indexing *)
   let input = In_channel.input_all stdin |> String.to_seq in
-  let width = input |> Seq.take_while (fun c -> c != '\n') |> Seq.length in
+  let width = input |> Seq.take_while (fun c -> c <> '\n') |> Seq.length in
   let input = Array.of_seq input in
   Printf.printf "Part 1: %d\n" @@ part1 input width;
   Printf.printf "Part 2: %d\n" @@ part2 input width

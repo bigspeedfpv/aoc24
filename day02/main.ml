@@ -40,7 +40,7 @@ let part2 reports =
     if idx = List.length report
     then 0
     else (
-      let spliced = List.filteri (fun i _ -> i != idx) report in
+      let spliced = List.filteri (fun i _ -> i <> idx) report in
       match check_report spliced with
       | 1 -> 1
       | _ -> check_report' ~idx:(idx + 1) report)
