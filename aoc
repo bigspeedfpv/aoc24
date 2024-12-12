@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+aoc__help() {
+	echo "Advent of Code helper utility."
+	echo ""
+	echo "Syntax: aoc <help|run|scaffold> [daynumber]"
+	echo "Subcommands:"
+	echo "	    help: shows this text"
+	echo "	     run: executes solution for a day. pipes input from day<no>/input.txt"
+	echo "	scaffold: sets up a folder for a given day number."
+}
+
+aoc__run() {
+	local day="day$1"
+
+	if [ ! -d "$day" ]; then
+		echo "Folder for $day not found. If the day number is a single digit, pad it with a zero (e.g. aoc run 03)."
+		return 1
+	fi
+
+	bat "$day/input.txt" | dune exec "$day"
+}
+
+aoc__scaffold() {
+	if ! [ "$1" -eq "$1" ] 2>/dev/null; then
+		echo "Day must be a number"
+		return 1
+	fi
+
+	local day="day$1"
+
+	if [ -d "$day" ]; then 
+		echo "Folder $day already exists, exiting"
+		return 1
+	fi
+
+	mkdir "$day"
+
+	{
+		echo "let part1 _input = 0"
+		echo "let part2 _input = 0"
+		echo ""
+		echo "let () ="
+		echo "  let input = In_channel.input_all stdin in"
+		echo "  Printf.printf \"Part 1: %d\" @@ part1 input;"
+		echo "  Printf.printf \"Part 2: %d\" @@ part2 input"
+		echo ";;"
+	} >> "$day/main.ml"
+
+	{
+		echo "(executable"
+ 		echo " (public_name day08)"
+ 		echo " (name main)"
+ 		echo " (libraries aoc))"
+	} >> "$day/dune"
+
+	echo "Files created for $day, building."
+	dune build "$day"
+	echo "Done."
+}
+
+if declare -f "aoc__$1" >/dev/null; then
+	func="aoc__$1"
+	shift 
+	"$func" "$@"
+elif declare -f "$1" >/dev/null 2>&1; then
+	"$@"
+elif [ "$1" = "" ]; then
+	echo "Expected subcommand."
+	aoc__help
+else 
+	echo "Subcommand $1 not recognized."
+	aoc__help
+fi

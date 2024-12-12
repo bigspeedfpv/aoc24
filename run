@@ -1,4 +1,0 @@
-#!/bin/sh
-
-DAY="day$1"
-bat $DAY/input.txt | dune exec $DAY
